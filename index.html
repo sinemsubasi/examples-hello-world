@@ -1,80 +1,179 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="tr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hello, Deno</title>
-  <link rel="preload" href="https://demo-styles.deno.deno.net/fonts/Moranga-Regular.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="https://demo-styles.deno.deno.net/fonts/Moranga-Medium.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="preload" href="https://demo-styles.deno.deno.net/fonts/Recursive_Variable.woff2" as="font" type="font/woff2" crossorigin />
-  <link rel="stylesheet" href="https://demo-styles.deno.deno.net/styles.css">
-  <style>
-    img {
-      display: inline-block;
-      vertical-align: middle;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Görsel Değerlendirme Deneyi</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f5f7;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: #fff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+        .screen {
+            display: none;
+        }
+        .active {
+            display: block;
+        }
+        h2 { margin-top: 0; color: #2c3e50; }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label { display: block; margin-bottom: 5px; font-weight: bold; }
+        input[type="text"], input[type="number"], select {
+            width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;
+        }
+        button {
+            background-color: #0056b3; color: white; border: none; padding: 10px 20px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 20px; width: 100%;
+        }
+        button:hover { background-color: #004494; }
+        .stimulus-img {
+            max-width: 100%; height: auto; border-radius: 4px; margin-bottom: 20px; max-height: 400px; object-fit: cover;
+        }
+        .likert-scale {
+            display: flex; justify-content: space-between; margin-top: 20px; align-items: flex-end;
+        }
+        .likert-option {
+            display: flex; flex-direction: column; align-items: center; cursor: pointer;
+        }
+        .likert-label { font-size: 12px; margin-top: 5px; text-align: center; width: 60px; }
+        #results-data {
+            text-align: left; background: #272822; color: #f8f8f2; padding: 15px; border-radius: 4px; white-space: pre-wrap; font-family: monospace; font-size: 14px;
+        }
+    </style>
 </head>
-
 <body>
-    <main>
-      <section>
-        <a href="https://deno.com/deploy">
-        </a>
-      <h1>
-        <p>
-          Hello, Deno!
-        </p>
-      </h1>
-      <p>
-        This little example is being served by <a href="https://deno.com/">Deno</a>.
-        You can run it locally or in porduction on <a href="https://deno.com/deploy">Deno Deploy</a> or other hosting platforms.
-      </p>
-      <ul>
-        <li>Run it locally with<code>deno task dev</code></li>
-        <li>Deploy it to <a href="https://deno.com/deploy">Deno Deploy</a> via the CLI by running<code>deno deploy</code></li>
-        <li>Run it locally and share it publically by running <code>deno deploy --connected</code></li>
-      </ul>
-    </section>
-      <hr>
-    <section>
-      <h2>What's next?</h2>
-      <p>
-        You can clone this example and deploy it to Deno Deploy in just a few clicks
-        <a href="https://app.deno.com/new?clone=https://github.com/denoland/examples&path=hello-world"><img src="https://deno.com/button" alt="Deploy on Deno"/></a>
-      </p>
-      <ul>
-        <li>
-          <a href="https://docs.deno.com/examples">More examples in the Deno Docs</a>
-        </li>
-        <li>
-          <a href="https://deno.com/deploy">Deno Deploy Early Access</a>
-        </li>
-      </ul>
-    </section>
-    </main>
-    <hr>
-    <footer>
-      <section>
-      <ul class="flex-btwn">
-        <li>
-          <a href="https://deno.com">BlueSky</a>
-        </li>
-        <li>
-          <a href="https://deno.com">Twitter</a>
-        </li>
-        <li>
-          <a href="https://deno.com">YouTube</a>
-        </li>
-        <li>
-          <a href="https://deno.com">Newsletter</a>
-        </li>
-        <li>
-          <a href="https://deno.com">Deno</a>
-        </li>
-      </ul>
-      </section>
-    </footer>
+
+<div class="container">
+    
+    <div id="screen-intro" class="screen active">
+        <h2>Araştırmaya Hoş Geldiniz</h2>
+        <p>Lütfen deneye başlamadan önce aşağıdaki bilgileri doldurunuz.</p>
+        
+        <div class="form-group">
+            <label for="age">Yaşınız:</label>
+            <input type="number" id="age" required placeholder="Örn: 25">
+        </div>
+        
+        <div class="form-group">
+            <label for="gender">Cinsiyetiniz:</label>
+            <select id="gender">
+                <option value="">Seçiniz...</option>
+                <option value="kadin">Kadın</option>
+                <option value="erkek">Erkek</option>
+                <option value="diger">Belirtmek İstemiyorum</option>
+            </select>
+        </div>
+
+        <button onclick="startExperiment()">Deneye Başla</button>
+    </div>
+
+    <div id="screen-experiment" class="screen">
+        <h2>Lütfen Görseli Değerlendirin</h2>
+        
+        <img src="bakimsiz-maskulen.jpg" alt="Deney Görseli" class="stimulus-img">
+        
+        <p><strong>Soru:</strong> Bu kişiyi ne kadar "maskülen" buluyorsunuz?</p>
+        
+        <div class="likert-scale">
+            <div class="likert-option"><input type="radio" name="likert" value="1"><span class="likert-label">1<br>Hiç</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="2"><span class="likert-label">2</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="3"><span class="likert-label">3</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="4"><span class="likert-label">4<br>Nötr</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="5"><span class="likert-label">5</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="6"><span class="likert-label">6</span></div>
+            <div class="likert-option"><input type="radio" name="likert" value="7"><span class="likert-label">7<br>Çok</span></div>
+        </div>
+
+        <button onclick="submitTrial()">Kaydet ve Bitir</button>
+    </div>
+
+    <div id="screen-end" class="screen">
+        <h2>Deney Bitti! Katılımınız için teşekkürler.</h2>
+        <p>Arka planda kaydedilen ve veritabanına gönderilecek olan veriler (JSON formatında) aşağıdadır:</p>
+        <div id="results-data"></div>
+    </div>
+
+</div>
+
+<script>
+    // Verileri tutacağımız ana obje
+    let experimentData = {
+        participantId: Math.random().toString(36).substr(2, 9), // Rastgele ID
+        demographics: {},
+        trial: {}
+    };
+
+    let startTime; // Kronometre için
+
+    function startExperiment() {
+        // Demografik verileri al
+        const age = document.getElementById('age').value;
+        const gender = document.getElementById('gender').value;
+
+        if(!age || !gender) {
+            alert("Lütfen tüm alanları doldurunuz.");
+            return;
+        }
+
+        experimentData.demographics = { age: parseInt(age), gender: gender };
+
+        // Ekranı değiştir
+        document.getElementById('screen-intro').classList.remove('active');
+        document.getElementById('screen-experiment').classList.add('active');
+
+        // Kronometreyi başlat (Milisaniye cinsinden çok hassas ölçüm yapar)
+        startTime = performance.now(); 
+    }
+
+    function submitTrial() {
+        // Likert ölçeğinden seçilen değeri al
+        const selectedOption = document.querySelector('input[name="likert"]:checked');
+        
+        if(!selectedOption) {
+            alert("Lütfen 1 ile 7 arasında bir puan veriniz.");
+            return;
+        }
+
+        // Tepki süresini (Reaction Time) hesapla
+        const endTime = performance.now();
+        const reactionTime = Math.round(endTime - startTime); // Küsuratları atalım
+
+        // Verileri objeye kaydet
+        experimentData.trial = {
+            stimulus: "bakimsiz-maskulen.jpg",
+            score: parseInt(selectedOption.value),
+            reactionTime_ms: reactionTime
+        };
+
+        // Ekranı değiştir
+        document.getElementById('screen-experiment').classList.remove('active');
+        document.getElementById('screen-end').classList.add('active');
+
+        // Normalde burada veriyi bir sunucuya (fetch / axios ile) POST ederiz.
+        // Demo amaçlı veriyi ekrana yazdırıyoruz:
+        document.getElementById('results-data').innerText = JSON.stringify(experimentData, null, 2);
+        
+        // Console'a da yazdıralım ki geliştirici araçlarından görülebilsin
+        console.log("Sunucuya gönderilecek veri:", experimentData);
+    }
+</script>
+
 </body>
 </html>
